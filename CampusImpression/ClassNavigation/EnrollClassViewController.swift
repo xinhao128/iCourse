@@ -7,14 +7,36 @@
 //
 
 import UIKit
+import Firebase
 
-class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate {
-
+class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate,UIPickerViewDataSource{
+    
+    func delete_course(deletecourse: String){
+        let userid = Auth.auth().currentUser?.uid
+        var course_ref: DocumentReference!
+        course_ref = Firestore.firestore().collection("users").document(userid!)
+        course_ref.getDocument { (data, error) in
+            if let err = error {
+                debugPrint("Error fetching course:\(err)")
+            }else {
+                self.current_course = data?.get("course") as! [String]
+                let index = self.current_course.index(of: deletecourse)
+                Firestore.firestore().collection("users").document(userid!).setData(["course" : self.current_course.remove(at: index!)], merge: true)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        
+    }
     var currentTextField = UITextField()
     let pickerView = UIPickerView()
-
-    let department_list = ["ECON","ICS","EECS"]
-    let course_number_list = ["20B","31","180A"]
+    var departCollectionRef: CollectionReference!
+    var course1CollectionRef: DocumentReference!
+    var course2CollectionRef: CollectionReference!
+    
+    
+    var department_list = [[String]]()
+    var course_number_list = ["you have not selected department yet"]
+    var current_course = [String]()
 
     
     @IBOutlet weak var departmentField: UITextField!
@@ -26,13 +48,45 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
         currentTextField.delegate = self
         departmentField!.delegate = self
         courseField!.delegate = self
-
+        
         
         createPickers()
         addDoneButtonOnKeyboard()
+        
+    }
+    
+    // fetch department of course
+    func fetch_depart(){
+        departCollectionRef = Firestore.firestore().collection("COURSES")
+        departCollectionRef.getDocuments { (departs, error) in
+            if let err = error {
+                debugPrint("Error fetching majors:\(err)")
+            }else {
+                self.department_list = list_of_value_with_uid(lm: (departs?.documents)!, key: "department")
+            }
+        }
+        
+    }
+    
+    // fetch title of course
+    func fetch_num(courseid: String){
+        course1CollectionRef = Firestore.firestore().collection("COURSES").document(courseid)
+        course2CollectionRef = course1CollectionRef.collection("course")
+        course2CollectionRef.getDocuments { (courses, error) in
+            if let err = error {
+                debugPrint("Error fetching majors:\(err)")
+            }else {
+//                //                print("type",type(of: majors))
+                self.course_number_list = list_of_value(lm: (courses?.documents)!, key: "num")
+//                print("num",courses?.documents)
+            }
+        }
+        
     }
     
     func addDoneButtonOnKeyboard() {
+        fetch_depart()
+        
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         doneToolbar.barStyle       = UIBarStyle.default
         let flexSpace              = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
@@ -51,10 +105,11 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
     
     // User clicks 'Done' button
     @objc func doneButtonAction() {
-        //        self.currentTextField.resignFirstResponder()
         self.view.endEditing(true)
         if currentTextField == departmentField {
-            let selectedValue = department_list[pickerView.selectedRow(inComponent: 0)]
+            let selectedValue = department_list[pickerView.selectedRow(inComponent: 0)][0]
+            let courseID = department_list[pickerView.selectedRow(inComponent: 0)][1]
+            fetch_num(courseid: courseID)
             departmentField!.text = selectedValue
         }
         else if currentTextField == courseField {
@@ -63,6 +118,7 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
         }
         
     }
+    
     func createPickers() {
         departmentField!.inputView = pickerView
         courseField!.inputView = pickerView
@@ -85,7 +141,6 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if currentTextField == courseField {
-            print(course_number_list.count)
             return course_number_list.count
         }
         else if currentTextField == departmentField {
@@ -96,7 +151,7 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if currentTextField == departmentField{
-            return department_list[row]
+            return department_list[row][0]
         }
         else if currentTextField == courseField{
             return course_number_list[row]
@@ -106,7 +161,7 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if currentTextField == departmentField{
-            departmentField!.text =  department_list[row]
+            departmentField!.text =  department_list[row][0]
         }
         else if currentTextField == courseField{
             courseField!.text =  course_number_list[row]
@@ -116,22 +171,30 @@ class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextF
     @IBAction func onEnrollClass(_ sender: Any) {
         self.dismiss(animated: false, completion: nil)
         
-        print("-------department",departmentField!.text!)
-        print("-------classnumber",courseField!.text!)
-        let newclass = departmentField!.text! + " " + courseField!.text!
-        print("-------newclass",newclass)
-        UserDefaults.standard.set(newclass, forKey: "newClass")
-        UserDefaults.standard.synchronize()
+        let newcourse = departmentField!.text! + " " + courseField!.text!
+        add_course(newcourse: newcourse)
     }
     
     
-    @IBAction func onCancelButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+    func add_course(newcourse: String){
+        let userid = Auth.auth().currentUser?.uid
+        var course_ref: DocumentReference!
+        course_ref = Firestore.firestore().collection("users").document(userid!)
+        course_ref.getDocument { (data, error) in
+            if let err = error {
+                debugPrint("Error fetching course:\(err)")
+            }else {
+                self.current_course = data?.get("course") as! [String]
+                self.current_course.append(newcourse)
+                Firestore.firestore().collection("users").document(userid!).setData(["course" : self.current_course], merge: true)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        
     }
     
-    @IBAction func onSubmitButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
+  
+
     /*
     // MARK: - Navigation
 

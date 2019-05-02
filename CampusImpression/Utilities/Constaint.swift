@@ -19,7 +19,8 @@ let GENDER = "gender"
 let HOMETOWN = "hometown"
 let MAJOR = "major"
 let BIRTHDAY = "birthday"
-
+let COURSE = "course"
+let USEREMAIL = "email"
 
 // function
 func list_of_value(lm: [QueryDocumentSnapshot],key: String) -> [String]{
@@ -27,6 +28,16 @@ func list_of_value(lm: [QueryDocumentSnapshot],key: String) -> [String]{
     var result = [String]()
     for document in lm {
         result.append((document.data())[key] as! String )
+    }
+    return result
+}
+
+
+func list_of_value_with_uid(lm: [QueryDocumentSnapshot],key: String) -> [[String]]{
+    
+    var result = [[String]]()
+    for document in lm {
+        result.append([(document.data()[key] as! String),document.documentID])
     }
     return result
 }

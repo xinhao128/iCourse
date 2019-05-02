@@ -7,44 +7,30 @@
 //
 
 import UIKit
+import Firebase
 
 class ClassViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
     @IBOutlet weak var ClassCollectionView: UICollectionView!
-    
     @IBOutlet weak var addBarButtonItem: UIBarButtonItem!
-    
     @IBOutlet weak var editButton: UIBarButtonItem!
 
     
-    var class_list = ["ICS 31","EECS 180A", "ECON 20B"]
-    
+    var class_list = [String]()
+    var course_ref: DocumentReference!
+    var current_course = [String]()
     let OFF = false
     let ON = true
     
-    let defaults = UserDefaults.standard
-    
-    func test() {
-        
-        let placeHolderValue = 1000
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(placeHolderValue, forKey: "placeholder")
-    }
-    
     var editMode: Bool!
     
-    var class_image_list: [UIImage] = [
-        UIImage(named:"ICS 31")!,
-        UIImage(named:"EECS 180A")!,
-        UIImage(named:"ECON 20B")!,
-        ]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         ClassCollectionView.dataSource = self
         ClassCollectionView.delegate = self
-        
+    
         editMode = OFF
         
         let layout = self.ClassCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -52,25 +38,43 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
         layout.minimumInteritemSpacing = 10
         layout.itemSize = CGSize(width: (self.ClassCollectionView.frame.size.width - 20)/2, height: self.ClassCollectionView.frame.size.height/3)
         
-        print("\n\nEditing mode: ", editMode)
-        
-        // Do any additional setup after loading the view.
+        guard let userid = Auth.auth().currentUser?.uid else {return}
+        course_ref = Firestore.firestore().collection("users").document(userid)
     }
+    
+    
+    // fetching course from data base
+    func getcourse(){
+        course_ref.getDocument { (data, error) in
+            if let err = error {
+                debugPrint("Error fetching course:\(err)")
+            }else {
+                self.class_list = data?.get("course") as! [String]
+                self.ClassCollectionView.reloadData()
+            }
+            self.ClassCollectionView.reloadData()
+        }
+    }
+    
+    
+    
     
     @IBAction func editButtonTapped(_ sender: Any) {
         if editMode == OFF {
             editMode = ON
             editButton.title = "Done"
+            addBarButtonItem.isEnabled = false
             ClassCollectionView.reloadData()
         } else {
             editMode = OFF
             editButton.title = "Edit"
+            
+            addBarButtonItem.isEnabled = true
             ClassCollectionView.reloadData()
         }
     }
     
     // CollectionView Function
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return class_list.count
     }
@@ -79,46 +83,51 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClassCell", for: indexPath) as! ClassCollectionViewCell
         
         cell.ClassLabel.text = class_list[indexPath.row]
-        cell.ClassImageView.image = class_image_list[indexPath.item]
         cell.layer.cornerRadius = 4
         cell.layer.masksToBounds = true
         
         if editMode == ON {
             cell.deleteButton.isHidden = false
-            addBarButtonItem.isEnabled = false
         } else {
             cell.deleteButton.isHidden = true
-            addBarButtonItem.isEnabled = true
         }
         
         cell.layer.borderColor = UIColor.lightGray.cgColor
         cell.layer.borderWidth = 1
-        
-        //        cell.delegate = self as! ClassCellDelegate
+
         return cell
     }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if editMode == true {
-            class_list.remove(at: indexPath.row)
-            ClassCollectionView.reloadData()
+            remove_course(index: indexPath.row)
         } else {
             self.performSegue(withIdentifier: "NavSegue", sender: nil)
         }
-        //        else{
-        //            defaults.set(nil, forKey: "newClass")
-        //            defaults.synchronize()
-        //
-        //            let newclassValue = defaults.string(forKey: "newClass")
-        //            print("-------",newclassValue)
-        //            if newclassValue != nil{
-        //                class_list.append(newclassValue!)
-        //                class_image_list.append(UIImage(named:"sample_1")!)
-        //                ClassCollectionView.reloadData()
-        //            }
+    }
+    
+    func remove_course(index: Int){
+        let userid = Auth.auth().currentUser?.uid
+        var course_ref: DocumentReference!
+        course_ref = Firestore.firestore().collection("users").document(userid!)
+        course_ref.getDocument { (data, error) in
+            if let err = error {
+                debugPrint("Error fetching course:\(err)")
+            }else {
+                self.current_course = data?.get("course") as! [String]
+                self.current_course.remove(at: index)
+                Firestore.firestore().collection("users").document(userid!).setData(["course" : self.current_course], merge: true)
+                self.class_list = self.current_course
+            }
+            self.ClassCollectionView.reloadData()
+        }
         
     }
-
-
+    override func viewWillAppear(_ animated: Bool) {
+        getcourse()
+    }
+    
+    
+    
 }

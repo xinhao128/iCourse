@@ -56,6 +56,7 @@ class Signup2ViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             if let err = error {
                 debugPrint("Error fetching majors:\(err)")
             }else {
+                print("type",type(of: majors))
                 self.major = list_of_value(lm: (majors?.documents)!, key: "major_name")
             }
         }
@@ -180,11 +181,13 @@ class Signup2ViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             guard let userId = Auth.auth().currentUser?.uid else {return}
             Firestore.firestore().collection(USERS_REF).document(userId).setData([
                 USERNAME: username,
+                USEREMAIL: email,
                 DATE_CREATED : FieldValue.serverTimestamp(),
                 BIRTHDAY : self.birthdayField?.text ?? "Unkown",
                 GENDER : self.genderField?.text ?? "Unkown",
                 HOMETOWN: self.hometownField?.text ?? "Unkown",
-                MAJOR: self.majorField?.text ?? "Unkown"
+                MAJOR: self.majorField?.text ?? "Unkown",
+                COURSE: ["Empty"]
                 ],completion: { (error) in
                     if let error = error {
                         print("error uid",error.localizedDescription)

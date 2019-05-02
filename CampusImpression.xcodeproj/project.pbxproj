@@ -12,6 +12,7 @@
 		18C7998E223C4CC3003C5E17 /* EvaluationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7998D223C4CC3003C5E17 /* EvaluationViewController.swift */; };
 		18C79990223C5199003C5E17 /* FeedBackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7998F223C5199003C5E17 /* FeedBackViewController.swift */; };
 		28D32214D69C79070D4C4533 /* Pods_CampusImpression.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE969E0C607BF368D4BC276A /* Pods_CampusImpression.framework */; };
+		362F1B76227A6DDA0063E279 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362F1B75227A6DDA0063E279 /* User.swift */; };
 		36CDED8E2272F6B300791E10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 36CDED8D2272F6B300791E10 /* GoogleService-Info.plist */; };
 		36E1379622736B21002FFBCB /* Constaint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E1379522736B21002FFBCB /* Constaint.swift */; };
 		DB29914B223B56FC001D05DD /* NagavigationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB29914A223B56FC001D05DD /* NagavigationTableViewController.swift */; };
@@ -51,6 +52,7 @@
 		18C7998B223C4A7D003C5E17 /* EvaluationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluationCell.swift; sourceTree = "<group>"; };
 		18C7998D223C4CC3003C5E17 /* EvaluationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluationViewController.swift; sourceTree = "<group>"; };
 		18C7998F223C5199003C5E17 /* FeedBackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackViewController.swift; sourceTree = "<group>"; };
+		362F1B75227A6DDA0063E279 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		36CDED8D2272F6B300791E10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../iOS app plist/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		36E1379522736B21002FFBCB /* Constaint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constaint.swift; sourceTree = "<group>"; };
 		9911DDD11A1BEEF55D0E723F /* Pods-CampusImpression.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusImpression.release.xcconfig"; path = "Pods/Target Support Files/Pods-CampusImpression/Pods-CampusImpression.release.xcconfig"; sourceTree = "<group>"; };
@@ -117,6 +119,14 @@
 				BE969E0C607BF368D4BC276A /* Pods_CampusImpression.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		362F1B74227A6DC20063E279 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				362F1B75227A6DDA0063E279 /* User.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		36E1379422736AAB002FFBCB /* Utilities */ = {
@@ -206,6 +216,7 @@
 		DBABE5A42221C50300D9A1CD /* CampusImpression */ = {
 			isa = PBXGroup;
 			children = (
+				362F1B74227A6DC20063E279 /* Model */,
 				36E1379422736AAB002FFBCB /* Utilities */,
 				18C79988223C4A1A003C5E17 /* Rating */,
 				DBBB7940223BB11D00742C31 /* ProfessorAndGrades */,
@@ -421,6 +432,7 @@
 				DB29914E223B6C7A001D05DD /* TutorViewController.swift in Sources */,
 				DB6935612238D47100352ED8 /* CommentCell.swift in Sources */,
 				DBCADBB322319F4800AFADB9 /* PostFilterViewController.swift in Sources */,
+				362F1B76227A6DDA0063E279 /* User.swift in Sources */,
 				DBCA71A422224FDF00446B72 /* HomeViewController.swift in Sources */,
 				DB72BA7A222CB99A00A61117 /* PersonalSettingsTableViewController.swift in Sources */,
 				DB299158223B8BD3001D05DD /* TutorAboutTableViewController.swift in Sources */,
