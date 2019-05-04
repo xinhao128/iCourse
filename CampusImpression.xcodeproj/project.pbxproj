@@ -13,12 +13,12 @@
 		18C79990223C5199003C5E17 /* FeedBackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7998F223C5199003C5E17 /* FeedBackViewController.swift */; };
 		28D32214D69C79070D4C4533 /* Pods_CampusImpression.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE969E0C607BF368D4BC276A /* Pods_CampusImpression.framework */; };
 		362F1B76227A6DDA0063E279 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362F1B75227A6DDA0063E279 /* User.swift */; };
+		36971FFF227CF274008D4524 /* ProfessorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36971FFE227CF274008D4524 /* ProfessorVC.swift */; };
 		36CDED8E2272F6B300791E10 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 36CDED8D2272F6B300791E10 /* GoogleService-Info.plist */; };
 		36E1379622736B21002FFBCB /* Constaint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E1379522736B21002FFBCB /* Constaint.swift */; };
 		DB29914B223B56FC001D05DD /* NagavigationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB29914A223B56FC001D05DD /* NagavigationTableViewController.swift */; };
 		DB29914E223B6C7A001D05DD /* TutorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB29914D223B6C7A001D05DD /* TutorViewController.swift */; };
 		DB299150223B6C9E001D05DD /* TutorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB29914F223B6C9E001D05DD /* TutorCell.swift */; };
-		DB299154223B75C5001D05DD /* TutorCoursesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB299153223B75C5001D05DD /* TutorCoursesTableViewController.swift */; };
 		DB299158223B8BD3001D05DD /* TutorAboutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB299157223B8BD3001D05DD /* TutorAboutTableViewController.swift */; };
 		DB29915A223B97CA001D05DD /* TutorApplyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB299159223B97CA001D05DD /* TutorApplyViewController.swift */; };
 		DB2D6FBC223A5B5500E2BE65 /* ClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB2D6FBB223A5B5500E2BE65 /* ClassCollectionViewCell.swift */; };
@@ -53,6 +53,7 @@
 		18C7998D223C4CC3003C5E17 /* EvaluationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluationViewController.swift; sourceTree = "<group>"; };
 		18C7998F223C5199003C5E17 /* FeedBackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBackViewController.swift; sourceTree = "<group>"; };
 		362F1B75227A6DDA0063E279 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		36971FFE227CF274008D4524 /* ProfessorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfessorVC.swift; sourceTree = "<group>"; };
 		36CDED8D2272F6B300791E10 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../iOS app plist/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		36E1379522736B21002FFBCB /* Constaint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constaint.swift; sourceTree = "<group>"; };
 		9911DDD11A1BEEF55D0E723F /* Pods-CampusImpression.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CampusImpression.release.xcconfig"; path = "Pods/Target Support Files/Pods-CampusImpression/Pods-CampusImpression.release.xcconfig"; sourceTree = "<group>"; };
@@ -60,7 +61,6 @@
 		DB29914A223B56FC001D05DD /* NagavigationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NagavigationTableViewController.swift; sourceTree = "<group>"; };
 		DB29914D223B6C7A001D05DD /* TutorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorViewController.swift; sourceTree = "<group>"; };
 		DB29914F223B6C9E001D05DD /* TutorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorCell.swift; sourceTree = "<group>"; };
-		DB299153223B75C5001D05DD /* TutorCoursesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorCoursesTableViewController.swift; sourceTree = "<group>"; };
 		DB299157223B8BD3001D05DD /* TutorAboutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorAboutTableViewController.swift; sourceTree = "<group>"; };
 		DB299159223B97CA001D05DD /* TutorApplyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorApplyViewController.swift; sourceTree = "<group>"; };
 		DB2D6FBB223A5B5500E2BE65 /* ClassCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -168,7 +168,6 @@
 			children = (
 				DB29914D223B6C7A001D05DD /* TutorViewController.swift */,
 				DB29914F223B6C9E001D05DD /* TutorCell.swift */,
-				DB299153223B75C5001D05DD /* TutorCoursesTableViewController.swift */,
 				DB299157223B8BD3001D05DD /* TutorAboutTableViewController.swift */,
 				DB299159223B97CA001D05DD /* TutorApplyViewController.swift */,
 			);
@@ -256,6 +255,7 @@
 				DBBB7943223BB22F00742C31 /* CourseCell.swift */,
 				DBBB7945223BB50600742C31 /* ProfessorInfoController.swift */,
 				DBBB7947223BCA6D00742C31 /* GradeDetailsViewController.swift */,
+				36971FFE227CF274008D4524 /* ProfessorVC.swift */,
 			);
 			path = ProfessorAndGrades;
 			sourceTree = "<group>";
@@ -436,6 +436,7 @@
 				DBCA71A422224FDF00446B72 /* HomeViewController.swift in Sources */,
 				DB72BA7A222CB99A00A61117 /* PersonalSettingsTableViewController.swift in Sources */,
 				DB299158223B8BD3001D05DD /* TutorAboutTableViewController.swift in Sources */,
+				36971FFF227CF274008D4524 /* ProfessorVC.swift in Sources */,
 				18C79990223C5199003C5E17 /* FeedBackViewController.swift in Sources */,
 				DBCA71A0222226ED00446B72 /* SignupViewController.swift in Sources */,
 				DB2D6FBE223A5CDB00E2BE65 /* ClassViewController.swift in Sources */,
@@ -445,7 +446,6 @@
 				18C7998A223C4A37003C5E17 /* EvaluationTableViewController.swift in Sources */,
 				DB29915A223B97CA001D05DD /* TutorApplyViewController.swift in Sources */,
 				DBBB7944223BB22F00742C31 /* CourseCell.swift in Sources */,
-				DB299154223B75C5001D05DD /* TutorCoursesTableViewController.swift in Sources */,
 				18C7998C223C4A7D003C5E17 /* EvaluationCell.swift in Sources */,
 				DB29914B223B56FC001D05DD /* NagavigationTableViewController.swift in Sources */,
 				DB2D6FBC223A5B5500E2BE65 /* ClassCollectionViewCell.swift in Sources */,

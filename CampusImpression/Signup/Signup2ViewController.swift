@@ -187,7 +187,8 @@ class Signup2ViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                 GENDER : self.genderField?.text ?? "Unkown",
                 HOMETOWN: self.hometownField?.text ?? "Unkown",
                 MAJOR: self.majorField?.text ?? "Unkown",
-                COURSE: ["Empty"]
+                COURSE: [String](),
+                TUTOR_COURSE: [String]()
                 ],completion: { (error) in
                     if let error = error {
                         print("error uid",error.localizedDescription)

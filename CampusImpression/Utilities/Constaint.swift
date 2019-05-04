@@ -21,6 +21,7 @@ let MAJOR = "major"
 let BIRTHDAY = "birthday"
 let COURSE = "course"
 let USEREMAIL = "email"
+let TUTOR_COURSE = "tutor_course"
 
 // function
 func list_of_value(lm: [QueryDocumentSnapshot],key: String) -> [String]{
@@ -41,3 +42,7 @@ func list_of_value_with_uid(lm: [QueryDocumentSnapshot],key: String) -> [[String
     }
     return result
 }
+
+// return tutor_name and office hour
+
+

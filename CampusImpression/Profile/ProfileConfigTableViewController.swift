@@ -1,28 +1,30 @@
-////
-////  ProfileConfigTableViewController.swift
-////  CampusImpression
-////
-////  Created by Xinhao Liang on 3/3/19.
-////  Copyright © 2019 Xinhao Liang. All rights reserved.
-////
 //
-//import UIKit
-//import Parse
+//  ProfileConfigTableViewController.swift
+//  CampusImpression
 //
-//class ProfileConfigTableViewController: UITableViewController {
+//  Created by Xinhao Liang on 3/3/19.
+//  Copyright © 2019 Xinhao Liang. All rights reserved.
 //
-//    @IBOutlet weak var profilePhotoView: UIImageView!
-//    @IBOutlet weak var usernameLabel: UILabel!
-//    @IBOutlet weak var emailLabel: UILabel!
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        profilePhotoView.layer.cornerRadius = 25.0
-//        profilePhotoView.layer.masksToBounds = true
-//        loadUser()
-//    }
-//
-//    func loadUser() {
+
+import UIKit
+import Firebase
+
+class ProfileConfigTableViewController: UITableViewController {
+
+    @IBOutlet weak var profilePhotoView: UIImageView!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        profilePhotoView.layer.cornerRadius = 25.0
+        profilePhotoView.layer.masksToBounds = true
+        
+        
+        loadUser()
+    }
+
+    func loadUser() {
 //        let query = PFQuery(className: "Profiles")
 //        query.includeKey("user")
 //        query.whereKey("user", equalTo: PFUser.current()!)
@@ -36,16 +38,26 @@
 //                print("fetch error")
 //            }
 //        }
-//    }
-//
-//    @IBAction func onLogout(_ sender: Any) {
-//        PFUser.logOut()
-//        let main = UIStoryboard(name: "Main", bundle: nil)
-//        let loginViewController = main.instantiateViewController(withIdentifier: "LoginViewController")
-//
-//        let delegate = UIApplication.shared.delegate as! AppDelegate
-//
-//        delegate.window?.rootViewController = loginViewController
-//    }
-//
-//}
+        let user = Auth.auth().currentUser!
+        self.usernameLabel.text = user.displayName as! String
+        self.emailLabel.text = user.email as! String
+    }
+
+    @IBAction func onLogout(_ sender: Any) {
+
+        let firebaseAuth = Auth.auth()
+        do{
+            try firebaseAuth.signOut()
+        }catch let signoutError as NSError {
+            debugPrint("Error Signing out: \(signoutError)")
+        }
+        
+        let main = UIStoryboard(name: "Main", bundle: nil)
+        let loginViewController = main.instantiateViewController(withIdentifier: "LoginViewController")
+
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+
+        delegate.window?.rootViewController = loginViewController
+    }
+
+}
