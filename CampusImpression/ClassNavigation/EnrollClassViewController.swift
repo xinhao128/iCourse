@@ -11,7 +11,8 @@ import Parse
 
 class EnrollClassViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
     
-    
+    var isSelected: Bool = false
+
     // –––––    TODO: Connect TableView outlet
     @IBOutlet weak var tableView: UITableView!
     
@@ -112,6 +113,7 @@ class EnrollClassViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        isSelected = true
         let cell = tableView.dequeueReusableCell(withIdentifier: "CoursesTableViewCell", for: indexPath) as! CoursesTableViewCell
         let citiesInSection = filteredData[indexPath.section].1
         cell.courseLabel.text = citiesInSection[indexPath.row]
@@ -130,15 +132,35 @@ class EnrollClassViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     @IBAction func onDoneButton(_ sender: Any) {
-        let course = PFObject(className: "Courses")
-        course["user"] = PFUser.current()!
-        course["courseTitle"] = self.selectedCourse
-        course.saveInBackground { (success, error) in
-            if success {
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                print("error!")
+        if isSelected {
+            let query = PFQuery(className: "Courses")
+            query.whereKey("user", equalTo: PFUser.current()!)
+            query.whereKey("courseTitle", equalTo: self.selectedCourse!)
+            print(self.selectedCourse)
+
+            let this_course = self.selectedCourse!
+            query.findObjectsInBackground { (selected, error) in
+                if selected == [] {
+                    let course = PFObject(className: "Courses")
+                    course["user"] = PFUser.current()!
+                    course["courseTitle"] = this_course
+                    course.saveInBackground { (success, error) in
+                        if success {
+                            self.dismiss(animated: true, completion: nil)
+                        } else {
+                            print("error!")
+                        }
+                    }
+                }
+                else {
+                    self.dismiss(animated: true, completion: nil)
+                }
             }
+
         }
+        else {
+            self.dismiss(animated: true, completion: nil)
+        }
+
     }
 }
