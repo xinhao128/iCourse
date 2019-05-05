@@ -31,6 +31,8 @@ class AddPostViewController: UIViewController {
         tagStudy.addTarget(self, action: #selector(tagClicked), for:.touchUpInside)
         tagLife.addTarget(self, action: #selector(tagClicked), for:.touchUpInside)
         tagEntertainment.addTarget(self, action: #selector(tagClicked), for:.touchUpInside)
+        
+        self.HideKeyboard()
     }
     
     @objc func tagClicked(sender: UIButton) {
@@ -74,5 +76,4 @@ class AddPostViewController: UIViewController {
         addPostImageViewController.postContents = postContents.text!
         addPostImageViewController.tag = self.tagText!
     }
-
 }

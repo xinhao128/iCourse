@@ -2253,7 +2253,6 @@
         <!--Courses-->
         <scene sceneID="AP8-6p-Zzz">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="woT-Mw-u8F" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController title="Courses" id="RrF-PK-I5F" customClass="CoursesTableViewController" customModule="CampusImpression" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="rZB-d3-kAX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
@@ -2304,6 +2303,7 @@
                         </connections>
                     </tableView>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="woT-Mw-u8F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1252" y="4093.403298350825"/>
         </scene>

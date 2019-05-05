@@ -76,6 +76,7 @@ class PostDetailsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         self.showLikes()
         self.showButton()
+        self.HideKeyboard()
         
     }
     
