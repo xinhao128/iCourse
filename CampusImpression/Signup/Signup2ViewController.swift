@@ -203,7 +203,7 @@ class Signup2ViewController: UIViewController, UIPickerViewDataSource, UIPickerV
      }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        currentTextField.resignFirstResponder()
+        self.view.endEditing(true)
         return true
     }
     

@@ -123,6 +123,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
            print("error")
         }
         else {
+            view.endEditing(true)
             self.performSegue(withIdentifier: "ContSignupSegue", sender: nil)
         }
     }
@@ -139,7 +140,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        self.view.endEditing(true)
         return true
     }
     

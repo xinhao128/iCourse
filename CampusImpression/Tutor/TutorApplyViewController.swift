@@ -10,9 +10,10 @@ import UIKit
 
 class TutorApplyViewController: UIViewController {
 
+    @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        scrollView.bounces = false
     }
     
     @IBAction func onCancelButton(_ sender: Any) {
