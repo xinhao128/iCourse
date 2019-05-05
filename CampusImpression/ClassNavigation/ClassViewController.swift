@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class ClassViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
 
@@ -16,28 +17,13 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBOutlet weak var editButton: UIBarButtonItem!
 
-    
-    var class_list = ["ICS 31","EECS 180A", "ECON 20B"]
+    var courses = [PFObject]()
+    //var currentCourse: String!
     
     let OFF = false
     let ON = true
     
-    let defaults = UserDefaults.standard
-    
-    func test() {
-        
-        let placeHolderValue = 1000
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(placeHolderValue, forKey: "placeholder")
-    }
-    
     var editMode: Bool!
-    
-    var class_image_list: [UIImage] = [
-        UIImage(named:"ICS 31")!,
-        UIImage(named:"EECS 180A")!,
-        UIImage(named:"ECON 20B")!,
-        ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,11 +36,22 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
         let layout = self.ClassCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsets(top: 0,left: 5,bottom: 0,right: 5)
         layout.minimumInteritemSpacing = 10
-        layout.itemSize = CGSize(width: (self.ClassCollectionView.frame.size.width - 20)/2, height: self.ClassCollectionView.frame.size.height/3)
+        layout.itemSize = CGSize(width: (self.ClassCollectionView.frame.size.width - 20)/2, height: self.ClassCollectionView.frame.size.height/4)
         
         print("\n\nEditing mode: ", editMode)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let query = PFQuery(className: "Courses")
+        query.includeKey("user")
         
-        // Do any additional setup after loading the view.
+        query.whereKey("user", equalTo: PFUser.current()!)
+        query.findObjectsInBackground{ (courses, error) in
+            if courses != nil {
+                self.courses = courses!
+                self.ClassCollectionView.reloadData()
+            }
+        }
     }
     
     @IBAction func editButtonTapped(_ sender: Any) {
@@ -72,16 +69,20 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
     // CollectionView Function
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return class_list.count
+        return courses.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClassCell", for: indexPath) as! ClassCollectionViewCell
         
-        cell.ClassLabel.text = class_list[indexPath.row]
-        cell.ClassImageView.image = class_image_list[indexPath.item]
-        cell.layer.cornerRadius = 4
+        let course = courses[indexPath.row]
+        cell.ClassLabel.text = course["courseTitle"] as? String
+        
+        cell.layer.backgroundColor = UIColor(red: 255/255, green: 210/255, blue: 0/255, alpha: 1.0).cgColor
+        cell.layer.cornerRadius = 20
         cell.layer.masksToBounds = true
+        cell.layer.borderColor = UIColor.lightGray.cgColor
+        cell.layer.borderWidth = 1
         
         if editMode == ON {
             cell.deleteButton.isHidden = false
@@ -90,35 +91,20 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
             cell.deleteButton.isHidden = true
             addBarButtonItem.isEnabled = true
         }
-        
-        cell.layer.borderColor = UIColor.lightGray.cgColor
-        cell.layer.borderWidth = 1
-        
-        //        cell.delegate = self as! ClassCellDelegate
         return cell
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if editMode == true {
-            class_list.remove(at: indexPath.row)
+            courses.remove(at: indexPath.row)
             ClassCollectionView.reloadData()
         } else {
+            let course = courses[indexPath.row]
+            let courseTitle = (course["courseTitle"] as! String)
+            UserDefaults.standard.set(courseTitle, forKey: "courseTitle")
+
             self.performSegue(withIdentifier: "NavSegue", sender: nil)
         }
-        //        else{
-        //            defaults.set(nil, forKey: "newClass")
-        //            defaults.synchronize()
-        //
-        //            let newclassValue = defaults.string(forKey: "newClass")
-        //            print("-------",newclassValue)
-        //            if newclassValue != nil{
-        //                class_list.append(newclassValue!)
-        //                class_image_list.append(UIImage(named:"sample_1")!)
-        //                ClassCollectionView.reloadData()
-        //            }
-        
     }
-
-
+    
 }

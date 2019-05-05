@@ -25,7 +25,11 @@ class TutorViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func loadTutors() {
         let query = PFQuery(className: "Tutor")
-        query.includeKey("tutorName")
+        query.includeKeys(["tutorName", "courseTitle"])
+        
+        let courseTitle = UserDefaults.standard.string(forKey: "courseTitle")
+        query.whereKey("courseTitle", equalTo: courseTitle!)
+        
         query.limit = 20
         query.findObjectsInBackground { (tutors, error) in
             if tutors != nil {
@@ -51,14 +55,14 @@ class TutorViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tutor = tutors[indexPath.row]
-        tutorName = (tutor["tutorName"] as! String)
-        self.performSegue(withIdentifier: "TutoringSegue", sender: nil)
+        tutorName = tutor["tutorName"] as? String
+        // self.performSegue(withIdentifier: "TutoringSegue", sender: nil)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let tutorCoursesTableViewController = segue.destination as? TutorCoursesTableViewController {
-            tutorCoursesTableViewController.about = self.tutorName
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let aboutTutor = segue.destination as? TutorAboutTableViewController {
+//            aboutTutor.name = self.tutorName
+//        }
+//    }
 
 }

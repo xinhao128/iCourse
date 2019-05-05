@@ -63,8 +63,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func loadPosts() {
+        let courseName = UserDefaults.standard.string(forKey: "courseTitle")
+        print(courseName!)
         let query = PFQuery(className: "Posts")
-        query.includeKey("author")
+        query.includeKeys(["author", courseName!])
+        query.whereKey("courseTitle", equalTo: courseName!)
         
         let filter = UserDefaults.standard.string(forKey: "Filter")
         if filter != nil && filter != "All" {

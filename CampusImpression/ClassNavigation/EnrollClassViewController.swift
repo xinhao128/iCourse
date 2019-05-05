@@ -7,139 +7,138 @@
 //
 
 import UIKit
+import Parse
 
-class EnrollClassViewController: UIViewController, UIPickerViewDelegate, UITextFieldDelegate {
-
-    var currentTextField = UITextField()
-    let pickerView = UIPickerView()
-
-    let department_list = ["ECON","ICS","EECS"]
-    let course_number_list = ["20B","31","180A"]
-
+class EnrollClassViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
     
-    @IBOutlet weak var departmentField: UITextField!
-    @IBOutlet weak var courseField: UITextField!
+    
+    // –––––    TODO: Connect TableView outlet
+    @IBOutlet weak var tableView: UITableView!
+    
+    let data = [("ICS", ["31", "33"]),
+                ("MGMT", ["115"])]
+
+    var filteredData: [(String, [String])]!, searchController: UISearchController!
+    
+    // Add Header Identifier
+    let HeaderViewIdentifier = "TableViewHeaderView"
+    
+    var selectedCourse: String! = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        pickerView.delegate = self
-        currentTextField.delegate = self
-        departmentField!.delegate = self
-        courseField!.delegate = self
-
         
-        createPickers()
-        addDoneButtonOnKeyboard()
+        filteredData = data
+        setupSearchController()
+        
+        // –––––    TODO: Assign tableView.datasource to VC    –––––
+        tableView.dataSource = self
+        
+        // –––––    TODO: Assign tableView.delegate to VC    –––––
+        tableView.delegate = self
+        
+        // –––––    TODO: Refresh tableView    –––––
+        tableView.reloadData()
+        
+        // Register UITableViewHeaderFooterView
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
     }
     
-    func addDoneButtonOnKeyboard() {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        doneToolbar.barStyle       = UIBarStyle.default
-        let flexSpace              = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem  = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.done, target: self, action: #selector(doneButtonAction))
-        
-        var items = [UIBarButtonItem]()
-        items.append(flexSpace)
-        items.append(done)
-        
-        doneToolbar.items = items
-        doneToolbar.sizeToFit()
-        
-        self.departmentField!.inputAccessoryView = doneToolbar
-        self.courseField!.inputAccessoryView = doneToolbar
-    }
     
-    // User clicks 'Done' button
-    @objc func doneButtonAction() {
-        //        self.currentTextField.resignFirstResponder()
-        self.view.endEditing(true)
-        if currentTextField == departmentField {
-            let selectedValue = department_list[pickerView.selectedRow(inComponent: 0)]
-            departmentField!.text = selectedValue
-        }
-        else if currentTextField == courseField {
-            let selectedValue = course_number_list[pickerView.selectedRow(inComponent: 0)]
-            courseField!.text = selectedValue
-        }
+    // ––––– SearchBar Functionality –––––
+    
+    // Create Search Bar
+    func setupSearchController() {
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        
+        // If we are using this same view controller to present the results
+        // dimming it out wouldn't make sense. Should probably only set
+        // this to yes if using another controller to display the search results.
+        searchController.dimsBackgroundDuringPresentation = false
+        
+        searchController.searchBar.sizeToFit()
+        tableView.tableHeaderView = searchController.searchBar
+        
+        // Sets this view controller as presenting view controller for the search interface
+        definesPresentationContext = true
         
     }
-    func createPickers() {
-        departmentField!.inputView = pickerView
-        courseField!.inputView = pickerView
+    
+    // Update tableview as the user types
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        filteredData = data.filter({ (data: (String, [String])) -> Bool in
+            let state = data.0
+            return state.localizedCaseInsensitiveContains(text)
+            
+        })
+        if filteredData.count == 0 {
+            filteredData = data
+        }
+        tableView.reloadData()
+    }
+    
+    
+    // –––––    TODO: Add Table View Functions    –––––
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return filteredData.count
+    }
+    
+    // Number of Sections
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredData[section].1.count
+    }
+    
+    // CellforRowAt
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CoursesTableViewCell", for: indexPath) as! CoursesTableViewCell
+        let citiesInSection = filteredData[indexPath.section].1
+        cell.courseLabel.text = citiesInSection[indexPath.row]
+        return cell
+    }
+    
+    // Height for section headers
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    // Content of each section header
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderViewIdentifier)
+        headerView!.textLabel!.text = filteredData[section].0
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EnrollClassViewController.viewTapped(gestureRecognizer:)))
-        view.addGestureRecognizer(tapGesture)
+        return headerView
     }
     
-    @objc func viewTapped(gestureRecognizer: UIGestureRecognizer) {
-        view.endEditing(true)
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        currentTextField = textField
-    }
-    
-    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if currentTextField == courseField {
-            print(course_number_list.count)
-            return course_number_list.count
-        }
-        else if currentTextField == departmentField {
-            return department_list.count
-        }
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if currentTextField == departmentField{
-            return department_list[row]
-        }
-        else if currentTextField == courseField{
-            return course_number_list[row]
-        }
-        return ""
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if currentTextField == departmentField{
-            departmentField!.text =  department_list[row]
-        }
-        else if currentTextField == courseField{
-            courseField!.text =  course_number_list[row]
-        }
-    }
-    
-    @IBAction func onEnrollClass(_ sender: Any) {
-        self.dismiss(animated: false, completion: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CoursesTableViewCell", for: indexPath) as! CoursesTableViewCell
+        let citiesInSection = filteredData[indexPath.section].1
+        cell.courseLabel.text = citiesInSection[indexPath.row]
         
-        print("-------department",departmentField!.text!)
-        print("-------classnumber",courseField!.text!)
-        let newclass = departmentField!.text! + " " + courseField!.text!
-        print("-------newclass",newclass)
-        UserDefaults.standard.set(newclass, forKey: "newClass")
-        UserDefaults.standard.synchronize()
+        let headerText = filteredData[indexPath.section].0
+        self.selectedCourse = headerText + " " + cell.courseLabel.text!
+        tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
     }
     
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath)?.accessoryType = .none
+    }
     
     @IBAction func onCancelButton(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func onSubmitButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+    @IBAction func onDoneButton(_ sender: Any) {
+        let course = PFObject(className: "Courses")
+        course["user"] = PFUser.current()!
+        course["courseTitle"] = self.selectedCourse
+        course.saveInBackground { (success, error) in
+            if success {
+                self.dismiss(animated: true, completion: nil)
+            } else {
+                print("error!")
+            }
+        }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

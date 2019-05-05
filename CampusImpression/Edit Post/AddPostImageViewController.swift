@@ -52,6 +52,7 @@ class AddPostImageViewController: UIViewController, UIImagePickerControllerDeleg
         post["postTitle"] = self.postTitle
         post["postContents"] = self.postContents
         post["tag"] = self.tag
+        post["courseTitle"] = UserDefaults.standard.string(forKey: "courseTitle")
         post["postedTime"] = Date()
         if imageView.image!.isEqual(UIImage(named: "image_placeholder")) {
             print("no image selected")
