@@ -1,0 +1,6 @@
+framework module Pods_CampusImpression {
+  umbrella header "Pods-CampusImpression-umbrella.h"
+
+  export *
+  module * { export * }
+}
