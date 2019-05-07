@@ -17,6 +17,7 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBOutlet weak var editButton: UIBarButtonItem!
 
+    
     var courses = [PFObject]()
     //var currentCourse: String!
     
@@ -58,10 +59,12 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
         if editMode == OFF {
             editMode = ON
             editButton.title = "Done"
+            addBarButtonItem.isEnabled = false
             ClassCollectionView.reloadData()
         } else {
             editMode = OFF
             editButton.title = "Edit"
+            addBarButtonItem.isEnabled = true
             ClassCollectionView.reloadData()
         }
     }
@@ -75,36 +78,58 @@ class ClassViewController: UIViewController, UICollectionViewDataSource, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ClassCell", for: indexPath) as! ClassCollectionViewCell
         
-        let course = courses[indexPath.row]
+        let course = courses[indexPath.item]
         cell.ClassLabel.text = course["courseTitle"] as? String
         
         cell.layer.backgroundColor = UIColor(red: 255/255, green: 210/255, blue: 0/255, alpha: 1.0).cgColor
         cell.layer.cornerRadius = 20
         cell.layer.masksToBounds = true
+        cell.backgroundColor = UIColor(red: 241/255, green: 241/255, blue: 241/255, alpha: 1.0)
         cell.layer.borderColor = UIColor.lightGray.cgColor
         cell.layer.borderWidth = 1
         
-        if editMode == ON {
-            cell.deleteButton.isHidden = false
-            addBarButtonItem.isEnabled = false
-        } else {
+        cell.delegate = self
+        
+        if editMode == OFF {
             cell.deleteButton.isHidden = true
-            addBarButtonItem.isEnabled = true
+        } else {
+            cell.deleteButton.isHidden = false
+            
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if editMode == true {
-            courses.remove(at: indexPath.row)
-            ClassCollectionView.reloadData()
-        } else {
-            let course = courses[indexPath.row]
-            let courseTitle = (course["courseTitle"] as! String)
-            UserDefaults.standard.set(courseTitle, forKey: "courseTitle")
-
+        let course = courses[indexPath.item]
+        let courseTitle = (course["courseTitle"] as! String)
+        UserDefaults.standard.set(courseTitle, forKey: "courseTitle")
+        if editMode == OFF {
             self.performSegue(withIdentifier: "NavSegue", sender: nil)
         }
     }
-    
+}
+
+extension ClassViewController: ClassCellDelegate {
+    func delete(cell: ClassCollectionViewCell) {
+        if let indexPath = ClassCollectionView?.indexPath(for: cell) {
+            let course = courses[indexPath.item]
+            let courseTitle = (course["courseTitle"] as! String)
+
+            let query = PFQuery(className: "Courses")
+            query.includeKeys(["user", "courseTitle"])
+            
+            query.whereKey("user", equalTo: PFUser.current()!).whereKey("courseTitle", equalTo: courseTitle)
+            query.findObjectsInBackground { (objects, error) in
+                if let objects = objects {
+                    print("\(objects) empty")
+                    for object in objects {
+                        print(object)
+                        object.deleteEventually()
+                    }
+                }
+            }
+            courses.remove(at: indexPath.item)
+            ClassCollectionView.reloadData()
+        }
+    }
 }

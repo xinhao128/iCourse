@@ -64,7 +64,7 @@ class PostDetailsViewController: UIViewController, UITableViewDelegate, UITableV
         query.includeKeys(["post", "author"])
         
         query.whereKey("post", equalTo: selectedPost)
-        query.whereKey("author", equalTo: PFUser.current() as! PFObject)
+        query.whereKey("author", equalTo: PFUser.current()!)
         
         query.findObjectsInBackground { (like, error) in
             if like != [] {
@@ -257,7 +257,7 @@ class PostDetailsViewController: UIViewController, UITableViewDelegate, UITableV
             query.includeKeys(["post", "author"])
             
             query.whereKey("post", equalTo: selectedPost)
-            query.whereKey("author", equalTo: PFUser.current() as! PFObject)
+            query.whereKey("author", equalTo: PFUser.current()!)
             
             query.findObjectsInBackground { (like, error) in
                 if like != nil {
