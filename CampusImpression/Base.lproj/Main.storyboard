@@ -1878,9 +1878,6 @@
                                                 </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="RrF-PK-I5F" kind="show" id="7bT-iw-r27"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
