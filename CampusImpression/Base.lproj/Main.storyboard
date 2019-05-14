@@ -1599,8 +1599,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="171" height="216"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZF-XM-ZAp">
-                                                    <rect key="frame" x="0.0" y="0.0" width="38" height="38"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZF-XM-ZAp">
+                                                    <rect key="frame" x="10.000000000000002" y="10" width="25.666666666666671" height="25"/>
                                                     <state key="normal" image="delete"/>
                                                     <connections>
                                                         <action selector="deleteButtonDidTap:" destination="bPs-uJ-0rn" eventType="touchUpInside" id="hzA-ou-wWy"/>
@@ -1623,9 +1623,9 @@
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="vZF-XM-ZAp" firstAttribute="top" secondItem="bPs-uJ-0rn" secondAttribute="top" id="5tN-wC-JDw"/>
+                                            <constraint firstItem="vZF-XM-ZAp" firstAttribute="top" secondItem="bPs-uJ-0rn" secondAttribute="top" constant="10" id="E3j-Yw-b0W"/>
                                             <constraint firstItem="vGt-GY-5NF" firstAttribute="leading" secondItem="bPs-uJ-0rn" secondAttribute="leading" constant="26" id="JGV-Wp-wQa"/>
-                                            <constraint firstItem="vZF-XM-ZAp" firstAttribute="leading" secondItem="bPs-uJ-0rn" secondAttribute="leading" id="T2Z-UW-g62"/>
+                                            <constraint firstItem="vZF-XM-ZAp" firstAttribute="leading" secondItem="bPs-uJ-0rn" secondAttribute="leading" constant="10" id="JoT-fx-bvn"/>
                                             <constraint firstAttribute="bottom" secondItem="MvD-Yc-0rx" secondAttribute="bottom" id="UHu-dD-Flb"/>
                                             <constraint firstItem="MvD-Yc-0rx" firstAttribute="top" secondItem="vGt-GY-5NF" secondAttribute="bottom" constant="20" id="Vvu-1l-B5n"/>
                                             <constraint firstItem="MvD-Yc-0rx" firstAttribute="centerX" secondItem="bPs-uJ-0rn" secondAttribute="centerX" id="eR5-XT-0Xd"/>
